@@ -28,7 +28,21 @@ function App() {
     );
   }
 
-  // search filter
+  // update price
+  function handleUpdatePrice(updatedPlant) {
+    setPlants((prev) =>
+      prev.map((plant) =>
+        plant.id === updatedPlant.id ? updatedPlant : plant
+      )
+    );
+  }
+
+  // delete plant
+  function handleDelete(id) {
+    setPlants((prev) => prev.filter((plant) => plant.id !== id));
+  }
+
+  // filter by search
   const filteredPlants = plants.filter((plant) =>
     plant.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -47,11 +61,13 @@ function App() {
         </div>
         <Search search={search} onSearchChange={setSearch} />
         <ul className="cards">
-          {filteredPlants.map((plant) => (
+          {filteredPlants.map((plant, index) => (
             <PlantCard
-              key={plant.id}
+              key={plant.id || index}
               plant={plant}
               onToggleSoldOut={handleToggleSoldOut}
+              onUpdatePrice={handleUpdatePrice}
+              onDelete={handleDelete}
             />
           ))}
         </ul>
