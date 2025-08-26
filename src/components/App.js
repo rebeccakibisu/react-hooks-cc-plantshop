@@ -7,7 +7,7 @@ function App() {
   const [plants, setPlants] = useState([]);
   const [search, setSearch] = useState("");
 
-  // fetch all plants on startup
+  // fetch plants on load
   useEffect(() => {
     fetch("http://localhost:6001/plants")
       .then((r) => r.json())
@@ -28,21 +28,7 @@ function App() {
     );
   }
 
-  // update price
-  function handleUpdatePrice(updatedPlant) {
-    setPlants((prev) =>
-      prev.map((plant) =>
-        plant.id === updatedPlant.id ? updatedPlant : plant
-      )
-    );
-  }
-
-  // delete plant
-  function handleDelete(id) {
-    setPlants((prev) => prev.filter((plant) => plant.id !== id));
-  }
-
-  // filter by search
+  // search filter
   const filteredPlants = plants.filter((plant) =>
     plant.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -61,13 +47,11 @@ function App() {
         </div>
         <Search search={search} onSearchChange={setSearch} />
         <ul className="cards">
-          {filteredPlants.map((plant, index) => (
+          {filteredPlants.map((plant) => (
             <PlantCard
-              key={plant.id || index}
+              key={plant.id}   // use id from server
               plant={plant}
               onToggleSoldOut={handleToggleSoldOut}
-              onUpdatePrice={handleUpdatePrice}
-              onDelete={handleDelete}
             />
           ))}
         </ul>
